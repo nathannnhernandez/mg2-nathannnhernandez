@@ -6,21 +6,39 @@ public class PenguinPlayer : MonoBehaviour
 {
 
     private Rigidbody2D _rigidbody;
-    [SerializeField]private GameObject _coinPrefab;
+    private bool _isGrounded;
+
     
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate( _coinPrefab, new Vector3(transform.position.x + 15f, transform.position.y, transform.position.z), Quaternion.identity);
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+
+
+
+        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
         {
             _rigidbody.AddForce(Vector2.up * 7f, ForceMode2D.Impulse);
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            _isGrounded = true;
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            _isGrounded = false;
+        }
+    }
+
 }
